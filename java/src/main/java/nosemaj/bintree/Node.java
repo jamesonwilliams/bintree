@@ -19,12 +19,12 @@ package org.nosemaj.bintree;
 import java.util.Objects;
 
 /**
- * A Node in a binary tree contains a value, as well as pointers to left
+ * A node in a binary tree contains a value, as well as pointers to left
  * and right child nodes, below it in the binary tree.
  *
  * @param <T> The type of value stored in the node
  */
-public final class Node<T> {
+public class Node<T> {
 
     /**
      * The left child.
@@ -70,19 +70,68 @@ public final class Node<T> {
     }
 
     /**
+     * Sets the value stored in the node.
+     * @param value The value to store in the node
+     */
+    public void setValue(final T value) {
+        this.value = value;
+    }
+
+    /**
+     * Determines if the node has a left child.
+     * @return true if the node has a left child
+     */
+    public boolean hasLeft() {
+        return left != null;
+    }
+
+    /**
      * Gets the left child of the node.
      * @return Left child of the node, null if not present
      */
-    public Node getLeft() {
+    public Node<T> getLeft() {
         return left;
+    }
+
+    /**
+     * Sets the left child of the node.
+     * @param left The left child of the node, null if not present
+     */
+    public void setLeft(final Node<T> left) {
+        this.left = left;
+    }
+
+    /**
+     * Determines if the node has a right child.
+     * @return true if the node has a right child, false otherwise
+     */
+    public boolean hasRight() {
+        return right != null;
     }
 
     /**
      * Gets the right child of the node.
      * @return Right child of the node, null if there is none
      */
-    public Node getRight() {
+    public Node<T> getRight() {
         return right;
+    }
+
+    /**
+     * Sets the right child of the node.
+     * @param right The right child of the node, null if not present
+     */
+    public void setRight(final Node<T> right) {
+        this.right = right;
+    }
+
+    /**
+     * Determines if the node is a leaf node. A leaf node is a node
+     * which has no children.
+     * @return true if the node is a leaf node; false, otherwise
+     */
+    public boolean isLeaf() {
+        return left == null && right == null;
     }
 
     @Override

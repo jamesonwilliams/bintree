@@ -51,14 +51,19 @@ public final class NodeTest {
 
         Node<Float> node = new Node<>(value);
 
+        // Will also test some our syntactic fluff methods here
         Assert.assertEquals(value, (float) node.getValue(), 0);
+        Assert.assertTrue(node.isLeaf());
+        Assert.assertFalse(node.hasLeft());
         Assert.assertEquals(null, node.getLeft());
+        Assert.assertFalse(node.hasRight());
         Assert.assertEquals(null, node.getRight());
     }
 
     /**
-     * The {@link Node(T, Node<T>, Node<T>)} constructor should result
-     * in a node with the specificed value and children.
+     * The {@link Node(T, Node<T>, Node<T>)}
+     * constructor should result in a node with the specificed value and
+     * children.
      */
     @Test
     public void shouldReturnValidNodeForFullArgsConstructor() {
@@ -68,9 +73,60 @@ public final class NodeTest {
 
         Node<Integer> node = new Node<>(value, left, right);
 
+        // Will also test some our syntactic fluff methods here
         Assert.assertEquals(value, (int) node.getValue());
+        Assert.assertFalse(node.isLeaf());
+        Assert.assertTrue(node.hasLeft());
         Assert.assertEquals(left, node.getLeft());
+        Assert.assertTrue(node.hasRight());
         Assert.assertEquals(right, node.getRight());
+    }
+
+
+    /**
+     * Setting the value should change the value in the node object.
+     */
+    @Test
+    public void shouldChangeValueWhenSetValueCalled() {
+
+        Object originalValue = new Object();
+        Object newValue = new Object();
+        Node<Object> node = new Node<>(originalValue);
+
+        node.setValue(newValue);
+
+        Assert.assertEquals(newValue, node.getValue());
+    }
+
+    /**
+     * Setting the left child should change the value on the node
+     * object.
+     */
+    @Test
+    public void shouldChangeChildWhenSetLeftCalled() {
+        Node<Object> originalLeft = new Node<>(new Object());
+        Node<Object> newLeft = new Node<>(new Object());
+        Node<Object> parent = new Node<>(new Object(), originalLeft, null);
+
+        parent.setLeft(newLeft);
+        Assert.assertEquals(newLeft, parent.getLeft());
+        Assert.assertNull(parent.getRight()); // Didn't change
+
+    }
+
+    /**
+     * Setting the right child should change the value on the node
+     * object.
+     */
+    @Test
+    public void shouldChangeChildWhenSetRightCalled() {
+        Node<Object> originalRight = new Node<>(new Object());
+        Node<Object> newRight = new Node<>(new Object());
+        Node<Object> parent = new Node<>(new Object(), null, originalRight);
+
+        parent.setRight(newRight);
+        Assert.assertEquals(newRight, parent.getRight());
+        Assert.assertNull(parent.getLeft()); // Didn't change
     }
 
     /**
@@ -157,5 +213,21 @@ public final class NodeTest {
         Node<Object> two = new Node<>(new Object());
 
         Assert.assertNotEquals(one.hashCode(), two.hashCode());
+    }
+
+    /**
+     * The syntactic fluff methods to check if a node has left, right,
+     * or no children, should function propertly for a node that has
+     * unbalanced children (only on one side).
+     */
+    @Test
+    public void shouldDiscernUnbalancedChildrenAppropriately() {
+
+        Node<Object> left = new Node<>(new Object());
+        Node<Object> parent = new Node<>(new Object(), left, null);
+
+        Assert.assertTrue(parent.hasLeft());
+        Assert.assertFalse(parent.hasRight());
+        Assert.assertFalse(parent.isLeaf());
     }
 }
