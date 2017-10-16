@@ -136,7 +136,7 @@ public class Node<T> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(value, left, right);
     }
 
     @Override

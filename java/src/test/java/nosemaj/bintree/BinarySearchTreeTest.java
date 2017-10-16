@@ -48,6 +48,7 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldConstructEmptyTree() {
         BinaryTree<Float> tree = new BinarySearchTree<Float>();
+
         Assert.assertTrue(tree.empty());
         Assert.assertEquals(0, tree.size());
     }
@@ -58,9 +59,10 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldAddValueToEmpty() {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
-
         Integer value = Integer.valueOf(random.nextInt());
+
         tree.add(value);
+
         Assert.assertFalse(tree.empty());
         Assert.assertEquals(1, tree.size());
         Assert.assertTrue(tree.contains(value));
@@ -74,18 +76,19 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldAddValueToNonEmptyTree() {
         BinaryTree<Boolean> tree = new BinarySearchTree<>();
-
         boolean value = random.nextBoolean();
         Boolean firstVal = Boolean.valueOf(value);
         Boolean secondVal = Boolean.valueOf(!value);
 
         tree.add(firstVal);
+
         Assert.assertEquals(1, tree.size());
         Assert.assertTrue(tree.contains(firstVal));
         Assert.assertFalse(tree.contains(secondVal));
         Assert.assertEquals(1, tree.count(firstVal));
 
         tree.add(secondVal);
+
         Assert.assertTrue(tree.contains(firstVal));
         Assert.assertEquals(1, tree.count(firstVal));
         Assert.assertTrue(tree.contains(secondVal));
@@ -99,7 +102,9 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldNotAddNullValuesToTree() {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
+
         tree.add(null);
+
         Assert.assertTrue(tree.empty());
         Assert.assertEquals(0, tree.size());
         Assert.assertFalse(tree.contains(null));
@@ -112,12 +117,15 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldReturnCorrectHeight() {
         BinaryTree<Float> tree = new BinarySearchTree<>();
-        tree.add(4f);
-        tree.add(5f);
-        tree.add(5f);
-        tree.add(6f);
+        Float value = random.nextFloat();
+        tree.add(value);
+        tree.add(value + 1);
+        tree.add(value + 1);
+        tree.add(value + 2);
 
-        Assert.assertEquals(3, tree.height());
+        int height = tree.height();
+
+        Assert.assertEquals(3, height);
     }
 
     /**
@@ -126,8 +134,11 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldReturnMinusOneForEmptyTreeHeight() {
         BinaryTree<Boolean> tree = new BinarySearchTree<>();
+
+        int height = tree.height();
+
         Assert.assertTrue(tree.empty());
-        Assert.assertEquals(-1, tree.height());
+        Assert.assertEquals(-1, height);
     }
 
     /**
@@ -149,15 +160,16 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldReturnIncreasingValueForInOrderTraversal() {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
-        tree.add(5);
-        tree.add(4);
-        tree.add(6);
+        Integer value = random.nextInt();
+        tree.add(value);
+        tree.add(value - 1);
+        tree.add(value + 1);
 
         List<Integer> values = tree.inOrder();
 
-        Assert.assertEquals(4, values.get(0).intValue());
-        Assert.assertEquals(5, values.get(1).intValue());
-        Assert.assertEquals(6, values.get(2).intValue());
+        assertEquals(value - 1, values.get(0));
+        assertEquals(value, values.get(1));
+        assertEquals(value + 1, values.get(2));
     }
 
     /**
@@ -166,15 +178,16 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldReturnPreOrderValueForPreOrderTraversal() {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
-        tree.add(5);
-        tree.add(4);
-        tree.add(6);
+        Integer value = random.nextInt();
+        tree.add(value);
+        tree.add(value - 1);
+        tree.add(value + 1);
 
         List<Integer> values = tree.preOrder();
 
-        Assert.assertEquals(5, values.get(0).intValue());
-        Assert.assertEquals(4, values.get(1).intValue());
-        Assert.assertEquals(6, values.get(2).intValue());
+        assertEquals(value, values.get(0));
+        assertEquals(value - 1, values.get(1));
+        assertEquals(value + 1, values.get(2));
     }
 
     /**
@@ -184,15 +197,16 @@ public final class BinarySearchTreeTest {
     public void shouldReturnPostOrderValuesForPostOrderTraversal() {
 
         BinaryTree<Integer> tree = new BinarySearchTree<>();
-        tree.add(5);
-        tree.add(4);
-        tree.add(6);
+        Integer value = random.nextInt();
+        tree.add(value);
+        tree.add(value - 1);
+        tree.add(value + 1);
 
         List<Integer> values = tree.postOrder();
 
-        Assert.assertEquals(4, values.get(0).intValue());
-        Assert.assertEquals(6, values.get(1).intValue());
-        Assert.assertEquals(5, values.get(2).intValue());
+        assertEquals(value - 1, values.get(0));
+        assertEquals(value + 1, values.get(1));
+        assertEquals(value, values.get(2));
     }
 
     /**
@@ -201,15 +215,16 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldReturnLevelOrderValuesForLevelOrderTraversal() {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
-        tree.add(5);
-        tree.add(4);
-        tree.add(6);
+        Integer value = random.nextInt();
+        tree.add(value);
+        tree.add(value - 1);
+        tree.add(value + 1);
 
         List<Integer> values = tree.levelOrder();
 
-        Assert.assertEquals(5, values.get(0).intValue());
-        Assert.assertEquals(4, values.get(1).intValue());
-        Assert.assertEquals(6, values.get(2).intValue());
+        assertEquals(value, values.get(0));
+        assertEquals(value - 1, values.get(1));
+        assertEquals(value + 1, values.get(2));
     }
 
     /**
@@ -219,19 +234,20 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldRemoveAllDuplicateValues() {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
-        tree.add(5);
-        tree.add(6);
-        tree.add(5);
+        Integer value = random.nextInt();
+        tree.add(value);
+        tree.add(value + 1);
+        tree.add(value);
         Assert.assertEquals(3, tree.size());
-        Assert.assertEquals(2, tree.count(5));
-        Assert.assertEquals(1, tree.count(6));
+        Assert.assertEquals(2, tree.count(value));
+        Assert.assertEquals(1, tree.count(value + 1));
 
-        tree.remove(5);
+        tree.remove(value);
         Assert.assertEquals(1, tree.size());
-        Assert.assertFalse(tree.contains(5));
-        Assert.assertEquals(0, tree.count(5));
-        Assert.assertTrue(tree.contains(6));
-        Assert.assertEquals(1, tree.count(6));
+        Assert.assertFalse(tree.contains(value));
+        Assert.assertEquals(0, tree.count(value));
+        Assert.assertTrue(tree.contains(value + 1));
+        Assert.assertEquals(1, tree.count(value + 1));
     }
 
     /**
@@ -241,12 +257,13 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldRemoveRootLeaf() {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
-        tree.add(1);
-        Assert.assertEquals(1, tree.count(1));
+        Integer value = random.nextInt();
+        tree.add(value);
+        Assert.assertEquals(1, tree.count(value));
 
-        tree.remove(1);
+        tree.remove(value);
 
-        Assert.assertEquals(0, tree.count(1));
+        Assert.assertEquals(0, tree.count(value));
         Assert.assertTrue(tree.empty());
     }
 
@@ -256,26 +273,27 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldRemoveValueInFullTree() {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
-        tree.add(10);
-        tree.add(5);
-        tree.add(15);
-        tree.add(3);
-        tree.add(7);
-        tree.add(12);
-        tree.add(17);
-        tree.add(10);
+        Integer value = random.nextInt();
+        tree.add(value);
+        tree.add(value - 5);
+        tree.add(value + 5);
+        tree.add(value - 7);
+        tree.add(value - 3);
+        tree.add(value + 3);
+        tree.add(value + 7);
+        tree.add(value);
 
         // Remove an interior node that has two children and has a
         // parent
         int originalSize = tree.size();
-        tree.remove(5);
-        Assert.assertFalse(tree.contains(5));
+        tree.remove(value - 5);
+        Assert.assertFalse(tree.contains(value - 5));
         Assert.assertEquals(originalSize - 1, tree.size());
 
         // Remove both the root node, as well the second instance of 10
         // (that was added last.)
-        tree.remove(10);
-        Assert.assertFalse(tree.contains(10));
+        tree.remove(value);
+        Assert.assertFalse(tree.contains(value));
         Assert.assertEquals(originalSize - 3, tree.size());
     }
 
@@ -304,9 +322,81 @@ public final class BinarySearchTreeTest {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
         Assert.assertTrue(tree.empty());
 
-        tree.remove(7);
+        Integer value = random.nextInt();
+        tree.remove(value);
 
         Assert.assertTrue(tree.empty());
-        Assert.assertEquals(0, tree.count(7));
+        Assert.assertEquals(0, tree.count(value));
+    }
+
+    /**
+     * The toString implementation should make some sensible reference
+     * to the values being stored in the tree.
+     */
+    @Test
+    public void shouldReturnSensibleToString() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        Integer value = random.nextInt();
+        tree.add(value);
+
+        String string = tree.toString();
+        Assert.assertTrue(string.contains(value.toString()));
+    }
+
+    /**
+     * A tree is equal to itself.
+     */
+    @Test
+    public void shouldReturnTrueForTreeEqualsSelf() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        Integer value = random.nextInt();
+        tree.add(value);
+        Assert.assertEquals(tree, tree);
+    }
+
+    /**
+     * Equals should return false when checked against a tree containing
+     * different values.
+     */
+    @Test
+    public void shouldReturnFalseForTreeEqualsDifferentTree() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        Integer value = random.nextInt();
+        tree.add(value);
+
+        BinaryTree<Integer> otherTree = new BinarySearchTree<>();
+        Integer otherValue = value - 1;
+        tree.add(otherValue);
+
+        Assert.assertNotEquals(tree, otherTree);
+    }
+
+    /**
+     * Make sure hashcode generates some non-zero number for a non-empty
+     * tree.
+     */
+    @Test
+    public void shouldReturnValidHashCodeForNonEmptyTree() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        tree.add(random.nextInt());
+        tree.add(random.nextInt());
+
+        Assert.assertNotEquals(0, tree.hashCode());
+    }
+
+    /**
+     * Checks that an actual object is equal to an expected object.
+     * @param expected The expected object
+     * @param actual The actaul object
+     */
+    private void assertEquals(final Object expected, final Object actual) {
+
+        if (expected == null) {
+            Assert.assertNull(actual);
+            return;
+        }
+
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(expected, actual);
     }
 }

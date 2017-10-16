@@ -18,6 +18,7 @@ package org.nosemaj.bintree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A BinarySearchTree is a BinaryTree with the additional properties
@@ -330,6 +331,52 @@ public class BinarySearchTree<T extends Comparable<T>>
         }
 
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(final Object that) {
+        if (that == null) {
+            return false;
+        }
+
+        if (getClass() != that.getClass()) {
+            return false;
+        }
+
+        BinaryTree<T> thatTree = (BinaryTree<T>) that;
+
+        if (!equals(this.inOrder(), thatTree.inOrder())) {
+            return false;
+        }
+
+        return equals(this.levelOrder(), thatTree.levelOrder());
+    }
+
+    /**
+     * Cheks to see if two lists are equal to one another.
+     * @param these A list of values
+     * @param those Another list of values
+     * @return true if the lists are the same size and contain the same
+     *         elements in the same order; false, otherwise
+     */
+    private boolean equals(final List<T> these, final List<T> those) {
+        int size = these.size();
+        if (size != those.size()) {
+            return false;
+        }
+
+        for (int index = 0; index < size; index++) {
+            if (!these.get(index).equals(those.get(index))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(root);
     }
 }
 
