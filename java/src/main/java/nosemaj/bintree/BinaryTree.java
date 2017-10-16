@@ -33,6 +33,12 @@ public interface BinaryTree<T> {
     void add(T value);
 
     /**
+     * Removes a value from the tree.
+     * @param value The value to remove from the tree
+     */
+    void remove(T value);
+
+    /**
      * Gets the height of the tree.
      * @return The height of the tree
      */

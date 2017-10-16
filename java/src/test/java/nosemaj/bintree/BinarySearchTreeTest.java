@@ -94,6 +94,19 @@ public final class BinarySearchTreeTest {
     }
 
     /**
+     * Should not be able to add nulls to the tree.
+     */
+    @Test
+    public void shouldNotAddNullValuesToTree() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        tree.add(null);
+        Assert.assertTrue(tree.empty());
+        Assert.assertEquals(0, tree.size());
+        Assert.assertFalse(tree.contains(null));
+        Assert.assertEquals(0, tree.count(null));
+    }
+
+    /**
      * Make sure height works for the happy path.
      */
     @Test
@@ -197,5 +210,103 @@ public final class BinarySearchTreeTest {
         Assert.assertEquals(5, values.get(0).intValue());
         Assert.assertEquals(4, values.get(1).intValue());
         Assert.assertEquals(6, values.get(2).intValue());
+    }
+
+    /**
+     * Removing a value should remove all instances of it, but not
+     * effect unrelated values.
+     */
+    @Test
+    public void shouldRemoveAllDuplicateValues() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        tree.add(5);
+        tree.add(6);
+        tree.add(5);
+        Assert.assertEquals(3, tree.size());
+        Assert.assertEquals(2, tree.count(5));
+        Assert.assertEquals(1, tree.count(6));
+
+        tree.remove(5);
+        Assert.assertEquals(1, tree.size());
+        Assert.assertFalse(tree.contains(5));
+        Assert.assertEquals(0, tree.count(5));
+        Assert.assertTrue(tree.contains(6));
+        Assert.assertEquals(1, tree.count(6));
+    }
+
+    /**
+     * Removing a value from a tree that is just a single node should
+     * result in an empty tree.
+     */
+    @Test
+    public void shouldRemoveRootLeaf() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        tree.add(1);
+        Assert.assertEquals(1, tree.count(1));
+
+        tree.remove(1);
+
+        Assert.assertEquals(0, tree.count(1));
+        Assert.assertTrue(tree.empty());
+    }
+
+    /**
+     * Try removing some various nodes in a multi-level tree.
+     */
+    @Test
+    public void shouldRemoveValueInFullTree() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        tree.add(10);
+        tree.add(5);
+        tree.add(15);
+        tree.add(3);
+        tree.add(7);
+        tree.add(12);
+        tree.add(17);
+        tree.add(10);
+
+        // Remove an interior node that has two children and has a
+        // parent
+        int originalSize = tree.size();
+        tree.remove(5);
+        Assert.assertFalse(tree.contains(5));
+        Assert.assertEquals(originalSize - 1, tree.size());
+
+        // Remove both the root node, as well the second instance of 10
+        // (that was added last.)
+        tree.remove(10);
+        Assert.assertFalse(tree.contains(10));
+        Assert.assertEquals(originalSize - 3, tree.size());
+    }
+
+    /**
+     * Trying to remove null from the tree should have no effect (since
+     * nulls cannot be stored).
+     */
+    @Test
+    public void shouldNotEffectTreeWhenRemoveNull() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        Integer value = Integer.valueOf(random.nextInt());
+        tree.add(value);
+        tree.remove(null);
+
+        Assert.assertEquals(1, tree.size());
+        Assert.assertTrue(tree.contains(value));
+        Assert.assertEquals(1, tree.count(value));
+    }
+
+    /**
+     * Trying to remove a value that doesn't exist in the tree should
+     * have no effect.
+     */
+    @Test
+    public void shouldNotEffectTreeRemoveOnEmptyTree() {
+        BinaryTree<Integer> tree = new BinarySearchTree<>();
+        Assert.assertTrue(tree.empty());
+
+        tree.remove(7);
+
+        Assert.assertTrue(tree.empty());
+        Assert.assertEquals(0, tree.count(7));
     }
 }

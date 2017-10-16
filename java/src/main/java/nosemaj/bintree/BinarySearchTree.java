@@ -37,7 +37,9 @@ public class BinarySearchTree<T extends Comparable<T>>
 
     @Override
     public void add(final T value) {
-        if (empty()) {
+        if (value == null) {
+            return;
+        } else if (empty()) {
             root = new Node<>(value);
         } else {
             add(root, value);
@@ -68,6 +70,77 @@ public class BinarySearchTree<T extends Comparable<T>>
     }
 
     @Override
+    public void remove(final T value) {
+        root = remove(root, value);
+    }
+
+    /**
+     * Removes all instances of a value, from a subtree whose root is
+     * parent, returning a new parent (since it might have changed).
+     * @param parent The root of the subtree
+     * @param value The value to remove from the subtree
+     * @return New parent of the subtree, possibly the same
+     */
+    private Node<T> remove(final Node<T> parent, final T value) {
+        if (parent == null || value == null) {
+            return parent;
+        }
+
+        // Cleanup our children before dealing with the current node
+        parent.setLeft(remove(parent.getLeft(), value));
+        parent.setRight(remove(parent.getRight(), value));
+
+        if (!parent.getValue().equals(value)) {
+            return parent;
+        }
+
+        // Okay, now we have to deal with our actual problem -- parent
+        // contains the value to be removed.
+
+        if (parent.isLeaf()) {
+            // For a leaf, the new subtree parent is null (there is no
+            // subtree anymore)
+            return null;
+        } else if (!parent.hasLeft()) {
+            // If there is only one child, just treat it as the new root
+            // of the subtree.
+            return parent.getRight();
+        } else if (!parent.hasRight()) {
+            // Ditto
+            return parent.getLeft();
+        }
+
+        /*
+         * If parent has two children, we find the next successor node,
+         * and swap values with it. Then, we just invoke remove again to
+         * get rid of the bad value we put in the successor node. By
+         * virtue of this, the parent node reference won't actually
+         * change, so we'll still return it.
+         */
+        Node<T> min = minNode(parent.getRight());
+        parent.setValue(min.getValue());
+        min.setValue(value);
+        parent.setRight(remove(parent.getRight(), value));
+
+        return parent;
+    }
+
+    /**
+     * Gets a node which stores the minimum value in a subtree.
+     * @param parent A root of a subtree
+     * @return A node which stores the minimum value in the subtree
+     */
+    private Node<T> minNode(final Node<T> parent) {
+        Node<T> node = parent;
+
+        while (node.hasLeft()) {
+            node = node.getLeft();
+        }
+
+        return node;
+    }
+
+    @Override
     public boolean contains(final T value) {
         return count(value) != 0;
     }
@@ -86,7 +159,7 @@ public class BinarySearchTree<T extends Comparable<T>>
      * @return The count of occureences of the value within the subtree
      */
     private int count(final Node<T> parent, final T value) {
-        if (parent == null) {
+        if (parent == null || value == null) {
             return 0;
         }
 
@@ -209,7 +282,7 @@ public class BinarySearchTree<T extends Comparable<T>>
      * Performs an in-order traversal of the subtree whose root is
      * parent, adding found values to the provided list of values.
      * @param parent The parent node of a substree
-     * @param values The list of values seen so far in an inorder
+     * @param values The list of values seen so far in an in-order
      *               traversal of the larger tree
      */
     private void inOrder(final Node<T> parent, final List<T> values) {
@@ -244,6 +317,19 @@ public class BinarySearchTree<T extends Comparable<T>>
         postOrder(parent.getLeft(), values);
         postOrder(parent.getRight(), values);
         values.add(parent.getValue());
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("Tree:");
+
+        for (T value : levelOrder()) {
+            builder.append(" " + value);
+        }
+
+        return builder.toString();
     }
 }
 
