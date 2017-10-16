@@ -37,7 +37,7 @@ public class BinarySearchTree<T extends Comparable<T>>
 
     @Override
     public void add(final T value) {
-        if (root == null) {
+        if (empty()) {
             root = new Node<>(value);
         } else {
             add(root, value);
@@ -50,13 +50,15 @@ public class BinarySearchTree<T extends Comparable<T>>
      * @param value Value to add to subtree
      */
     private void add(final Node<T> parent, final T value) {
-        if (value.compareTo(parent.getValue()) < 0) {
+        int comparison = value.compareTo(parent.getValue());
+
+        if (comparison < 0) {
             if (parent.hasLeft()) {
                 add(parent.getLeft(), value);
             } else {
                 parent.setLeft(new Node<>(value));
             }
-        } else { // Value is greater than or equal to parent
+        } else { // comparison >= 0
             if (parent.hasRight()) {
                 add(parent.getRight(), value);
             } else {
@@ -66,7 +68,36 @@ public class BinarySearchTree<T extends Comparable<T>>
     }
 
     @Override
-    public void remove(final T value) {
+    public boolean contains(final T value) {
+        return count(value) != 0;
+    }
+
+    @Override
+    public int count(final T value) {
+        return count(root, value);
+    }
+
+    /**
+     * Gets the count of values that exist in a subtree whose root is
+     * parent.
+     * @param parent The root of a subtree
+     * @param value The value for which we want to count occurrences in
+     *              the subtree
+     * @return The count of occureences of the value within the subtree
+     */
+    private int count(final Node<T> parent, final T value) {
+        if (parent == null) {
+            return 0;
+        }
+
+        int count = count(parent.getLeft(), value)
+            + count(parent.getRight(), value);
+
+        if (parent.getValue().equals(value)) {
+            count++;
+        }
+
+        return count;
     }
 
     @Override
@@ -121,7 +152,7 @@ public class BinarySearchTree<T extends Comparable<T>>
     public List<T> levelOrder() {
         List<T> values = new ArrayList<>();
 
-        if (root == null) {
+        if (empty()) {
             return values;
         }
 

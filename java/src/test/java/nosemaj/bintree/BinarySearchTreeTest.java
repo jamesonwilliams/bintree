@@ -49,6 +49,7 @@ public final class BinarySearchTreeTest {
     public void shouldConstructEmptyTree() {
         BinaryTree<Float> tree = new BinarySearchTree<Float>();
         Assert.assertTrue(tree.empty());
+        Assert.assertEquals(0, tree.size());
     }
 
     /**
@@ -58,8 +59,12 @@ public final class BinarySearchTreeTest {
     public void shouldAddValueToEmpty() {
         BinaryTree<Integer> tree = new BinarySearchTree<>();
 
-        tree.add(Integer.valueOf(random.nextInt()));
+        Integer value = Integer.valueOf(random.nextInt());
+        tree.add(value);
         Assert.assertFalse(tree.empty());
+        Assert.assertEquals(1, tree.size());
+        Assert.assertTrue(tree.contains(value));
+        Assert.assertEquals(1, tree.count(value));
     }
 
     /**
@@ -69,10 +74,22 @@ public final class BinarySearchTreeTest {
     @Test
     public void shouldAddValueToNonEmptyTree() {
         BinaryTree<Boolean> tree = new BinarySearchTree<>();
-        tree.add(Boolean.valueOf(random.nextBoolean()));
-        Assert.assertEquals(1, tree.size());
 
-        tree.add(Boolean.valueOf(random.nextBoolean()));
+        boolean value = random.nextBoolean();
+        Boolean firstVal = Boolean.valueOf(value);
+        Boolean secondVal = Boolean.valueOf(!value);
+
+        tree.add(firstVal);
+        Assert.assertEquals(1, tree.size());
+        Assert.assertTrue(tree.contains(firstVal));
+        Assert.assertFalse(tree.contains(secondVal));
+        Assert.assertEquals(1, tree.count(firstVal));
+
+        tree.add(secondVal);
+        Assert.assertTrue(tree.contains(firstVal));
+        Assert.assertEquals(1, tree.count(firstVal));
+        Assert.assertTrue(tree.contains(secondVal));
+        Assert.assertEquals(1, tree.count(secondVal));
         Assert.assertEquals(2, tree.size());
     }
 

@@ -33,12 +33,6 @@ public interface BinaryTree<T> {
     void add(T value);
 
     /**
-     * Removes a value from the tree.
-     * @param value The value to remove from the tree
-     */
-    void remove(T value);
-
-    /**
      * Gets the height of the tree.
      * @return The height of the tree
      */
@@ -55,6 +49,22 @@ public interface BinaryTree<T> {
      * @return True if the tree is empty; false, otherwise
      */
     boolean empty();
+
+    /**
+     * Checks if the specified value is in the tree.
+     * @param value The value which may or may not be in the tree
+     * @return true if one or more instances of the value are stored in
+     *         the tree; false, otherwise
+     */
+    boolean contains(T value);
+
+    /**
+     * Counts the occurrences of a value in the tree.
+     * @param value The value for which we want a count of occurrences
+     *              within the tree
+     * @return Number of times value appears in tree
+     */
+    int count(T value);
 
     /**
      * Traverse the tree in pre-order. The current node is added to the
